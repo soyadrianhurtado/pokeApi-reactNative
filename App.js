@@ -6,106 +6,112 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
   View,
+  Pressable,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {HomeScreen} from './src/Screens/Home.Screen';
+import {LoginScreen} from './src/Screens/Login.Screen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+const loginToken = {
+  mail: 'prueba@prueba.com',
+  pass: 'prueba1234',
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+const Screens = () => {
+  const [verClave, setVerClave] = useState(false);
+  const [mail, setMail] = useState('');
+  const [pass, setPass] = useState('');
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView style={styles.container}>
+      {mail === loginToken.mail && pass === loginToken.mail ? (
+        <View>
+          <Text>PokeAPI</Text>
         </View>
-      </ScrollView>
+      ) : (
+        <View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleStyle}>Inicia sesión para continuar</Text>
+          </View>
+          <View style={styles.formLogin}>
+            <View style={styles.passCage}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Correo"
+                keyboardType="email-address"
+                value={mail}
+                autoCapitalize="none"
+                onChangeText={setMail}
+              />
+            </View>
+            <View style={styles.passCage}>
+              <TextInput
+                style={styles.inputPass}
+                placeholder="Contraseña"
+                keyboardType="default"
+                autoCorrect={false}
+                secureTextEntry={verClave}
+                textContentType="password"
+                value={pass}
+                onChangeText={setPass}
+                autoCapitalize="none"
+              />
+              <Pressable
+                onPress={() => {
+                  verClave === false ? setVerClave(true) : setVerClave(false);
+                }}
+                style={styles.pressableEye}>
+                {verClave === false ? (
+                  <Text>Ver clave</Text>
+                ) : (
+                  <Text>Ocultar</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
+const App = () => {
+  return <Screens />;
+};
+
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    backgroundColor: '#f2f2f2',
+    width: '100%',
+    height: '100%',
+    padding: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  titleStyle: {
+    color: '#ff1d00',
+    fontSize: 23,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  textInput: {
+    height: 46,
+    backgroundColor: Colors.principal,
+    width: '100%',
+    fontSize: 15,
+    marginTop: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: Colors.principal,
+    color: Colors.blue,
+    padding: 11,
+    paddingLeft: 18,
+    flexDirection: 'row',
   },
 });
 
